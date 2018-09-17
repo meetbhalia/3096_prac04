@@ -31,22 +31,22 @@ GPIO.setup(SPICS, GPIO.OUT)
 
 # function to convert data to voltage level,
 # places: number of decimal places needed
-#def ConvertVolts(data,places):
-#    volts = (data * 3.3) / float(1023)
-#    volts = round(volts,places)
-#    return volts
+def ConvertVolts(data,places):
+    volts = (data * 3.3) / float(1023)
+    volts = round(volts,places)
+    return volts
 
 #function to convert data to degree celcius
-#def ConvertToDegrees(data,places):
-#    temp = (((ConvertVolts(data,places))-0.5)/0.01)
-#    temp = round(temp,places)
-#    return temp
+def ConvertToDegrees(data,places):
+    temp = (((ConvertVolts(data,places))-0.5)/0.01)
+    temp = round(temp,places)
+    return temp
 
 #function to convert data to percentage light
-#def ConvertToLight(data,places):
-#    light = (((ConvertVolts(data,places))/3.3)*100)
-#    light = round(light,places)
-#    return light
+def ConvertToLight(data,places):
+    light = (((ConvertVolts(data,places))/3.3)*100)
+    light = round(light,places)
+    return light
 
 # function definition: threaded callback
 #def callback1(channel):
@@ -62,7 +62,7 @@ GPIO.setup(SPICS, GPIO.OUT)
 #light_data = GetData (7)
 
 # Define delay between readings
-#delay = 2
+delay = 2
 
 mcp = Adafruit_MCP3008.MCP3008(clk=SPICLK, cs=SPICS, mosi=SPIMOSI, miso=SPIMISO)
 #global variable
@@ -84,9 +84,27 @@ try:
 	#Adafruit
 	for i in range(8):
 		values[i] = mcp.read_adc(i)
-	#delay half a second
-	time.sleep(0.5)
+
 	print values
+
+	#Pot voltage
+	Pot_volts = ConvertVolts(values[7], 4)
+	print("Pot")
+	print(Pot_volts)
+
+	#Temp of room
+	Temp_room = ConvertToDegrees(values[0], 4)
+	print("Temp")
+	print(Temp_room)
+
+	#Light
+	light_level = ConvertToLight(values[6], 4)
+	print("Light")
+	print(light_level)
+
+	#delay
+	time.sleep(delay)
+
 except KeyboardInterrupt:
 #    spi.close()
      GPIO.cleanup()
