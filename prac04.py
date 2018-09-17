@@ -9,14 +9,14 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
 # pin definition
-SPICLK = 11
-SPIMISO = 9
-SPIMOSI = 10
-SPICS = 8
-GPIO.setup(SPIMOSI, GPIO.OUT)
-GPIO.setup(SPIMISO, GPIO.IN)
-GPIO.setup(SPICLK, GPIO.OUT)
-GPIO.setup(SPICS, GPIO.OUT)
+#SPICLK = 11
+#SPIMISO = 9
+#SPIMOSI = 10
+#SPICS = 8
+#GPIO.setup(SPIMOSI, GPIO.OUT)
+#GPIO.setup(SPIMISO, GPIO.IN)
+#GPIO.setup(SPICLK, GPIO.OUT)
+#GPIO.setup(SPICS, GPIO.OUT)
 
 # Open SPI bus
 spi = spidev.SpiDev() # create spi object
@@ -76,3 +76,4 @@ try:
         time.sleep(delay)
 except KeyboardInterrupt:
     spi.close()
+#   GPIO.cleanup()
