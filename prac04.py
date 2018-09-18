@@ -18,15 +18,15 @@ GPIO.setup(SPIMISO, GPIO.IN)
 GPIO.setup(SPICLK, GPIO.OUT)
 GPIO.setup(SPICS, GPIO.OUT)
 
-# Open SPI bus
-spi = spidev.SpiDev() # create spi object
-spi.open(0,0)
+mcp = Adafruit_MCP3008.MCP3008(clk=SPICLK, cs=SPICS, mosi=SPIMOSI,
+miso=SPIMISO)
 
-# function to read ADC data from a channel
-def GetData(channel): # channel must be an integer 0-7
-    adc = spi.xfer2([1,(8+channel)<<4,0]) # sending 3 bytes
-    data = ((adc[1]&3) << 8) + adc[2]
-    return data
+# global variable
+values = [0]*8
+
+while True:
+    for i in range(8):
+        values[i] = mcp.read_adc(i)
 
 # function to convert data to voltage level,
 # places: number of decimal places needed
@@ -56,22 +56,13 @@ def ConvertToLight(data,places):
 #GPIO.add_event_detect(switch_1, GPIO.FALLING, callback=callback1,
 #bouncetime=200)
 
-# Define sensor channels
-temp_data = GetData (0)
-light_data = GetData (7)
-
 # Define delay between readings
 delay = 2
 
 try:
     while True:
         # Read the data
-        #sensor_temp = ConvertToDegrees(temp_data,2)
-        #sensor_light = ConvertToLight(light_data,2)
-        #print (sensor_temp)
-        print ((temp_data))
-        #print (sensor_light)
-        print ((light_data))
+ 
         # Wait before repeating loop
         time.sleep(delay)
 except KeyboardInterrupt:
