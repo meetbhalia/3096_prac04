@@ -1,10 +1,8 @@
 #!/usr/bin/python
 
-#import spidev
 import Adafruit_MCP3008
 import time
 import os
-#import sys
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
@@ -45,16 +43,6 @@ disp_num = 0
 
 #global variable
 disp_values = [[0]*5 for i in range(5)]
-
-# Open SPI bus
-#spi = spidev.SpiDev() # create spi object
-#spi.open(0,0)
-
-# function to read ADC data from a channel
-#def GetData(channel): # channel must be an integer 0-7
-#    adc = spi.xfer2([1,(8+channel)<<4,0]) # sending 3 bytes
-#    data = ((adc[1]&3) << 8) + adc[2]
-#    return data
 
 # function to convert data to voltage level,
 # places: number of decimal places needed
@@ -141,37 +129,18 @@ try:
     print("Time		Timer		Pot	Temp	Light")
     while True:
 
-	#spidev implementation
-        # Read the data
-        #sensor_temp = ConvertToDegrees(temp_data,2)
-        #sensor_light = ConvertToLight(light_data,2)
-        #print (sensor_temp)
-        #print ((temp_data))
-        #print (sensor_light)
-        #print ((light_data))
-        # Wait before repeating loop
-        #time.sleep(delay)
-
-	#Adafruit
+	#Adafruit read ADC
 	for i in range(8):
 		values[i] = mcp.read_adc(i)
 
-	#print values
-
 	#Pot voltage
 	Pot_volts = ConvertVolts(values[7], 4)
-	#print("Pot")
-	#print(Pot_volts)
 
 	#Temp of room
 	Temp_room = ConvertToDegrees(values[0], 4)
-	#print("Temp")
-	#print(Temp_room)
 
 	#Light
 	light_level = ConvertToLight(values[6], 4)
-	#print("Light")
-	#print(light_level)
 
 	if recording:
 		current_time =  time.time()
@@ -195,7 +164,6 @@ try:
 	time.sleep(delay)
 
 except KeyboardInterrupt:
-#    spi.close()
      GPIO.cleanup()
 
 GPIO.cleanup()
